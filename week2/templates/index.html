@@ -27,8 +27,7 @@
 		<h1>My Linux Server</h1>
 		<h3>Week 2 assignment: Visitor Counter</h3>
 
-		<p class="counter">{{ count }}</p>
-		<p class="counter-label">visits to this page</p>
+		<p>There are {{ count }} visits to this page</p>
 
 		<h2>What this page does</h2>
 		<p>This is a small Python app running behind Nginx on the same virtual machine as Week 1. Nginx takes any request for <code>/viikko2/</code> and passes it on to the app, which sits in <code>127.0.0.1:5000</code> and isn't reachable from the outside. Each time the page loads, the counter goes up by one.</p>
