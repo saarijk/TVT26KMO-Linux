@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>Viikko 2 - Visitor Counter</title></head>
+<html lang="en">
+<head>
+	<meta chatset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>My Linux Server - Week 2</title>
+	<style>
+		body {
+			max-width: 800px;
+			margin: 40px auto;
+			padding: 0 20px;
+			font-family: Consolas, "Courier New", monospace;
+			line-height:1.6;
+			background: #f0f4f8;
+			color: #203040;
+		}
+		main { background: #eef3e5; padding: 32px 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); } 
+		h1 { color: #2d4600; font-size: 1.8em; border-bottom: 2px solid #1b2a00; padding-bottom: 8px; } 
+		h2 { color: #5a8d00; font-size: 1.25em; }
+		h3 { font-size: 1.25em; font-style: italic; }
+		code { font-size: 14px; }
+		pre { background: #eef2f6; padding: 16px; overflow-x: auto; border-left: 3px solid #005a86; border-radius: 4px; font-size: 0.95em; }
+	</style>
+</head>
 <body>
-  <h1>Viikko 2: Visitor Counter</h1>
-  <p>This page has been loaded <strong>{{ count }}</strong> times.</p>
-  <p>Database: SQLite. The count is stored in a table and persists across restarts.</p>
-  <p><a href="https://github.com/saarijk/TVT26KMO-Linux">Source code on GitHub</a></p>
+	<main>
+		<h1>My Linux Server</h1>
+		<h3>Week 2 assignment: Visitor Counter</h3>
+
+		<p class="counter">{{ count }}</p>
+		<p class="counter-label">visits to this page</p>
+
+		<h2>What this page does</h2>
+		<p>This is a small Python app running behind Nginx on the same virtual machine as Week 1. Nginx takes any request for <code>/viikko2/</code> and passes it on to the app, which sits in <code>127.0.0.1:5000</code> and isn't reachable from the outside. Each time the page loads, the counter goes up by one.</p>
+
+		<h2>Database</h2>
+		<p>The count lives in an <b>SQLite</b> database file (<code>visitors.db</code>) in the app directory. SQLite doesn't need a separate server process because the whole database is just a file, which keeps things simple and self-contained.</p>
+
+		<h2>How the counter is stored</h2>
+		<p>Inside the database there's a single-row table called <code>counter</code> with an integer <code>count</code> field. On every request, the app runs an <code>UPDATE ... SET count = count + 1</code> and then reads the value back to show it. Since the number lives on disk rather than in memory, it survives restarts of both the app and the server.</p>
+
+		<h2>Restart test</h2>
+		<p class="note">After rebooting the virtual machine, the page came back up normally and the counter carried on from where it left off instead of resetting to zero. That confirms Nginx, the Python app, and the SQLite database all start on their own, and that the visit count sticks around.</p>
+
+		<h2>Source code</h2>
+		<p>The application source is on GitHub: <a href="https://github.com/saarijk/TVT26KMO-Linux">saarijk/TVT26KMO-Linux</a></p>
+	</main>
 </body>
 </html>
