@@ -14,6 +14,8 @@ def init_db():
     conn.commit()
     conn.close()
 
+init_db()
+
 @app.route('/')
 def index():
     conn = sqlite3.connect(DB_PATH)
@@ -24,5 +26,4 @@ def index():
     return render_template('index.html', count=count)
 
 if __name__ == '__main__':
-    init_db()
     app.run(host='127.0.0.1', port=5000)
