@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta chatset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>My Linux Server - Week 1</title>
+	<style>
+		body {
+			max-width: 800px;
+			margin: 40px auto;
+			padding: 0 20px;
+			font-family: Consolas, "Courier New", monospace;
+			line-height:1.6;
+			background: #f0f4f8;
+			color: #203040;
+		}
+		main { background: #eef3e5; padding: 32px 40px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); } 
+		h1 { color: #2d4600; font-size: 1.8em; border-bottom: 2px solid #1b2a00; padding-bottom: 8px; } 
+		h2 { color: #5a8d00; font-size: 1.25em; }
+		h3 { font-size: 1.25em; font-style: italic; }
+		code { font-size: 14px; }
+		pre { background: #eef2f6; padding: 16px; overflow-x: auto; border-left: 3px solid #005a86; border-radius: 4px; font-size: 0.95em; }
+	</style>
+</head>
+<body>
+	<h1>My Linux Server</h1>
+	<h3>Week 1 assignment</h3>
+	<h2>1. Linux distribution and version</h2>
+	<p>Ubuntu 22.04.5 LTS (Jammy)</p>
+	<p>I was able to check the exact version used with <code>lsb_release -a</code> in the SSH session I had open on Powershell.</p>
+
+	<h2>2. What is Nginx, and what does it do on this server?</h2>
+	<p>Nginx is a web server and reverse proxy. On this server, it is the thing that listens to incoming requests on port 80 and then hands back the HTML files sitting in <code>/var/www/html</code>. When someone types my IP into the browser, Nginx is what answers and shows them this page. In this assignment, it is taking the HTTP request and returning static content.</p>
+	<h2>3. Which commands did I use</h2>
+	<p>I used various commands to get this site up and running.</p>
+	<p>
+		<ul>
+			<li>Install: <code>sudo apt update &amp;&amp; sudo apt install nginx -y</code></li>
+			<li>Check status: <code>sudo systemctl status nginx</code></li>
+			<li>Enable on boot: <code>sudo systemctl enable nginx</code></li>
+			<li>Reboot system: <code>sudo reboot</code></li>
+		</ul>
+	<p>We use <b>sudo</b> to run the command as administrator, as installing software can require elevated privileges. The part <b>apt update</b> refreshes the local package index from the repositories but this part doesn't update anything. It simply lets <b>apt</b> know if there are newer versions available. If we skip this part, we might end up installing outdated or missing packages. Then we install the packages we need along with their dependencies with <b>apt install package_name</b> and the <b>-y</b> flag at the end automatically confirms the installation.</p>
+	<p>Then, when checking the status, we call <b>systemctl</b> which is the system that manages services on modern Ubuntu. Writing <b>status nginx</b> will show if the Nginx service is running. We want to find the line <b>Active: active (running)</b> in the results on the terminal. </p>
+	<p>To enable this service to run on boot, we use the <b>enable</b> keyword and invoke the <b>systemctl</b>. This won't start the service immediately, but since our installation also started it, I don't need to worry about rebooting to enable it separately.</p>
+	<p>Additional commands I used were: <code>sudo nano /var/www/html/index.html</code> to edit this page, and <code>lsb_release -a</code> to double check which version of Ubuntu I was running specifically.</p>
+</body>
+</html>
