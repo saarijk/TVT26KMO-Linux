@@ -228,9 +228,9 @@ cat > "$TEMP_FILE" <<EOF
         <table>
           <thead><tr><th scope="col">Test input</th><th scope="col">Expected status</th><th scope="col">Actual status</th></tr></thead>
           <tbody>
-            <tr><td>50%</td><td>OK</td><td>TODO</td></tr>
-            <tr><td>80%</td><td>WARNING</td><td>TODO</td></tr>
-            <tr><td>90%</td><td>WARNING</td><td>TODO</td></tr>
+            <tr><td>50%</td><td>OK</td><td>OK</td></tr>
+            <tr><td>80%</td><td>WARNING</td><td>WARNING</td></tr>
+            <tr><td>90%</td><td>WARNING</td><td>WARNING</td></tr>
           </tbody>
         </table>
       </div>
