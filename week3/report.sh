@@ -10,6 +10,7 @@ UPTIME_TEXT="$(uptime -p)"
 DISK_USAGE="$(df -P / | awk 'NR==2 {print $5}')"
 MEM_TOTAL="$(free -m | awk 'NR==2 {print $2}')"
 MEM_AVAILABLE="$(free -m | awk 'NR==2 {print $7}')"
+GITHUB_URL="https://github.com/saarijk/TVT26KMO-Linux"
 
 # function to determine disk space status
 check_disk_status() {
@@ -163,7 +164,7 @@ cat > "$TEMP_FILE" <<EOF
         <p class="eyebrow">Linux · Week 3</p>
         <h1>Server Status Report</h1>
         <p>Week 3: Linux command line and Bash scripting</p>
-        <p>TODO: Add your own introduction.</p>
+        <p>This page displays a live server status report that is rebuilt every minute by a Bash script. Keep reading to find the commands I used, how the script works, and the results of testing it.</p>
     </header>
     <main>
     <section aria-labelledby="status-heading">
@@ -199,20 +200,30 @@ cat > "$TEMP_FILE" <<EOF
       <h2 id="script-heading">How the script works</h2>
       <p>The script collects server information using Linux commands and stores the results in Bash variables through command substitution. A function uses an if statement to determine the disk space status.</p>
       <p>The script generates a temporary HTML file and then moves the completed file into place as index.html. Nginx serves this file at /viikko3/.</p>
-      <p>TODO: Explain the disk space function and one example of piping from your own script.</p>
+      <p>The disk space status is decided by a function called <code>check_disk_status</code>. It receives the usage string produced by <code>df</code> (for example <code>3%</code>), strips the percent sign with <code>&#36;{usage%\%}</code>, and then
+        compares the remaining number to 80 using an <code>if</code> statement. If the number is 80 or higher, the function returns <code>WARNING</code>; otherwise it returns <code>OK</code>. The function is defined once near the top of the script and
+        called from the main body, so the same logic can be reused and tested separately.</p>
+      <p>One example of piping in the script is the line that collects the disk usage: <code>df -P / | awk 'NR==2 {print &#36;5}'</code>. The <code>df -P /</code> command lists the root filesystem in a stable POSIX format, and its output is passed through the pipe
+        (<code>|</code>) to <code>awk</code>. The <code>awk</code> program reads the second row (<code>NR==2</code>) and prints the fifth column (<code>&#36;5</code>), which is the usage percentage. The <code>-P</code> flag matters because it keeps the column
+        positions predictable even when device names are long, so <code>awk</code> always finds the percentage in the same place. </p>
     </section>
 
     <section aria-labelledby="schedule-heading">
       <h2 id="schedule-heading">Scheduling</h2>
-      <p>TODO: State whether you used cron or a systemd timer. Explain the schedule and how you ensured that it continues after a reboot.</p>
+      <p>The report is scheduled with <strong>cron</strong>, not a systemd timer. The schedule is a single line in root's crontab: </p>
+      <pre>* * * * * /bin/bash /home/ubuntu/TVT26KMO-Linux/week3/report.sh</pre>
+      <p>The five fields mean <em>every minute, every hour, every day, every month, every weekday</em>, so the script runs once per minute. Running it as root is necessary because the script  writes to <code>/var/www/html/viikko3/</code>, which is owned
+        by root. </p>
+      <p>To make sure the schedule survives a reboot, I checked that the cron service is enabled at boot with <code>systemctl is-enabled cron</code>, which returned <code>enabled</code>. Cron reads root's crontab automatically when it starts, so the job is restored 
+        without any manual step. I also verified this with an actual reboot: the report continued updating after the VM came back up, and the generation time on the page was newer than before the reboot. </p>
     </section>
 
     <section aria-labelledby="tests-heading">
       <h2 id="tests-heading">Test results</h2>
       <h3>Syntax check and manual execution</h3>
-      <p>TODO: Describe the results of running <code>bash -n report.sh</code> and executing the script manually.</p>
+      <p>Running <code>bash -n report.sh</code> produced no output, which means the syntax was valid. Running <code>sudo bash report.sh</code> manually generated the report successfully; the generation time in the resulting HTML was 2026-11-11 17:13:30 UTC.</p>
       <h3>Disk space status tests</h3>
-      <p>TODO: Test the status logic using temporary input values. Record your actual results below and restore real disk usage afterwards.</p>
+      <p>I tested the status logic by calling <code>check_disk_status</code> directly with temporary values, so I did not have to fill the disk. The real <code>df</code> command was restored afterwards.</p>
       <div class="table-container">
         <table>
           <thead><tr><th scope="col">Test input</th><th scope="col">Expected status</th><th scope="col">Actual status</th></tr></thead>
@@ -224,14 +235,19 @@ cat > "$TEMP_FILE" <<EOF
         </table>
       </div>
       <h3>Automatic updates</h3>
-      <p>TODO: Record the generation times of at least two consecutive automatic updates.</p>
+      <p>The cron log showed the script running automatically at 17:22:01, 17:23:01, 17:24:01 and 17:25:01 UTC. Reloading the page showed matching generation times, confirming that the schedule works and the page displays the most recent report.</p>
       <h3>Reboot test</h3>
-      <p>TODO: Record when you rebooted the VM and whether the Week 2 application and Week 3 page opened afterwards. Include evidence that the report continued to update.</p>
+      <p>Before rebooting, the latest generation time was 17:25:01 UTC. After running <code>sudo reboot</code> and waiting about a minute, the Week 3 page loaded with a new generation time of 17:28:01 UTC and an uptime of 1 minute. The Week 1 and Week 2
+        pages also loaded normally. This confirms that cron started automatically, the report schedule continued after reboot, and the other services on the server were unaffected. </p>
     </section>
 
     <section aria-labelledby="lesson-heading">
       <h2 id="lesson-heading">A problem solved or a lesson learned</h2>
-      <p>TODO: Describe one example from your own work.</p>
+      <p>One lesson came from a simple typo. While practising the commands, I typed <code>dp -P /</code> instead of <code>df -P /</code>. Instead of just failing silently, Ubuntu responded with <em>"Command 'dp' not found, but can be installed with: sudo apt
+        install speech-tools"</em>. That message was confusing at first (I had no idea why a disk command would need speech tools) but it made me look closely at what I had actually typed, and the missing <code>f</code> was easy to spot once I compared 
+        it to the correct command.</p>
+      <p>The lesson was twofold. First, a small typo can send you down a completely wrong path, so it is worth reading the command name carefully before installing anything. Second, Linux error messages are usually helpful if you read them properly: the shell did not
+        just say "error", it told me exactly which command it could not find and even suggested a package. Learning to read those messages instead of skimming past them has already saved me time more than once during this course.</p>
     </section>
   </main>
 
