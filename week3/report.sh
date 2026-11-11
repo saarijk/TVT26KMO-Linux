@@ -211,8 +211,8 @@ cat > "$TEMP_FILE" <<EOF
     <section aria-labelledby="schedule-heading">
       <h2 id="schedule-heading">Scheduling</h2>
       <p>The report is scheduled with <strong>cron</strong>, not a systemd timer. The schedule is a single line in root's crontab: </p>
-      <pre>* * * * * /bin/bash /home/ubuntu/TVT26KMO-Linux/week3/report.sh</pre>
-      <p>The five fields mean <em>every minute, every hour, every day, every month, every weekday</em>, so the script runs once per minute. Running it as root is necessary because the script  writes to <code>/var/www/html/viikko3/</code>, which is owned
+      <pre><code>* * * * * /bin/bash /home/ubuntu/TVT26KMO-Linux/week3/report.sh</code></pre>
+      <p>The five fields mean <em>every minute, every hour, every day, every month, every weekday</em>, so the script runs once per minute. Running it as root is necessary here because the script writes to <code>/var/www/html/viikko3/</code>, which is owned
         by root. </p>
       <p>To make sure the schedule survives a reboot, I checked that the cron service is enabled at boot with <code>systemctl is-enabled cron</code>, which returned <code>enabled</code>. Cron reads root's crontab automatically when it starts, so the job is restored 
         without any manual step. I also verified this with an actual reboot: the report continued updating after the VM came back up, and the generation time on the page was newer than before the reboot. </p>
