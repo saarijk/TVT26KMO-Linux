@@ -1,0 +1,4 @@
+Week 3 report schedule (root's crontab)
+Runs report.sh once per minute
+
+* * * * * /bin/bash /home/ubuntu/TVT26KMO-Linux/week3/report.sh
