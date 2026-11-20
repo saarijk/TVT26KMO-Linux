@@ -1,0 +1,5 @@
+.env
+visitors.db
+__pycache__/
+*.pyc
+venv/
