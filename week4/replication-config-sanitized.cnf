@@ -1,0 +1,16 @@
+# ============================================================
+# Server A (Master) — /etc/mysql/mariadb.conf.d/50-server.cnf
+# ============================================================
+[mysqld]
+server-id = 1
+log_bin = /var/log/mysql/mysql-bin.log
+binlog_format = row
+bind-address = 0.0.0.0
+
+# ============================================================
+# Server B (Replica) — /etc/mysql/mariadb.conf.d/50-server.cnf
+# ============================================================
+# [mysqld]
+# server-id = 2
+# relay-log = /var/log/mysql/relay-bin
+# read_only = 1
