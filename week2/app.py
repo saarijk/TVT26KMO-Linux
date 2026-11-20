@@ -21,10 +21,6 @@ def init_db():
     conn = pymysql.connect(**DB_CONFIG)
     try:
         with conn.cursor() as cur:
-            cur.execute(
-                'CREATE TABLE IF NOT EXISTS counter '
-                '(id INT PRIMARY KEY, count INT NOT NULL DEFAULT 0)'
-            )
             cur.execute('SELECT count FROM counter WHERE id = 1')
             if cur.fetchone() is None:
                 cur.execute('INSERT INTO counter (id, count) VALUES (1, 0)')
