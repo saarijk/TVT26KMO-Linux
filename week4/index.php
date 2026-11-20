@@ -8,10 +8,10 @@ $user = 'replica_ro';
 $pass = 'REPLACE_ME';
 $charset = 'utf8mb4';
 
-$dns = "mysql:host=$host;dbname=$db;charset=$charset";
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
         PDO::ATTR_ERRMODE               => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE    => POD::FETCH_ASSOC,
+        PDO::ATTR_DEFAULT_FETCH_MODE    => PDO::FETCH_ASSOC,
 ];
 
 try {
@@ -49,7 +49,7 @@ try {
 
                 h1 {
                         color: #2d4600;
-                        font-size: 1.8.em;
+                        font-size: 1.8em;
                         border-bottom: 2px solid #1b2a00;
                         padding-bottom: 8px;
                 }
@@ -105,11 +105,11 @@ try {
                 }
 
                 th {
-                        background: #f0f0f0:
+                        background: #f0f0f0;
                 }
 
                 .ok {
-                        color: 2e7d32;
+                        color: #2e7d32;
                         font-weight: 600;
                 }
 
@@ -193,7 +193,7 @@ try {
             <tr><td>Ordinary user write on B blocked: <code>ERROR 1290 ... --read-only</code></td><td class="ok">✅</td></tr>
             <tr><td>≥2 successful automatic cron backups; ≥2 timestamped backup directories on B</td><td class="ok">✅</td></tr>
             <tr><td>Restored test file checksum matches original</td><td class="ok">✅</td></tr>
-            <tr><td>After reboot of B: page, replication, cron still healthy</td><td class="ok">✅ (pending this phase)</td></tr>
+            <tr><td>After reboot of B: page, replication, cron still healthy</td><td class="ok">✅</td></tr>
         </table>
 
         <h2>One problem solved / one thing learned</h2>
