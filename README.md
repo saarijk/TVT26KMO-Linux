@@ -8,6 +8,7 @@ Course assignments for Linux server administration (cPouta/OpenStack).
 - `week2/` — Flask + SQLite visitor counter (now MariaDB on Server A)
 - `week3/` — server status report script + cron
 - `week4/` — server cloning, hourly backups, MariaDB replication
+- `week5/` — LLM chat with CI/CD (separate repository: https://github.com/saarijk/TVT26KMO-Linux-LLM)
 
 ## Week 4 — Server cloning, backups and replication
 
@@ -54,3 +55,13 @@ Replication mirrors changes — including deletions and corruption — within se
 
 - Server A: http://195.148.31.130/
 - Server B: http://86.50.23.104/
+
+## Week 5 — CI/CD pipeline and self-hosted LLM chat
+
+Built in its own repository, because GitHub Actions only reads workflows from the repository root.
+
+- Chat: http://195.148.31.130/viikko5/
+- Documentation and test results: http://195.148.31.130/viikko5/docs
+- Repository: https://github.com/saarijk/TVT26KMO-Linux-LLM
+
+Deployed to Server A, since the chat writes to MariaDB and Server B's database is a read-only replica.
